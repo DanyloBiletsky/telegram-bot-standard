@@ -10,40 +10,42 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class TelegramLambdaHandler implements RequestStreamHandler{
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
+public class TelegramLambdaHandler implements RequestStreamHandler {
     private static final ObjectMapper mapper = new ObjectMapper();
-    private static ConfigurableApplicationContext context;
-    private static Main bot;
+    private static final Main bot;
 
     static {
-        // Ініціалізація Spring-контексту з головним класом Spring Boot
-        context = SpringApplication.run(TelegramApplication.class);
+        // Ініціалізація Spring-контексту
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.scan("com.example.bot");
+        context.refresh();
         bot = context.getBean(Main.class);
     }
 
     @Override
-    public void handleRequest(InputStream inputStream, OutputStream outputStream, Context lambdaContext) throws IOException {
+    public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
         try {
-            // Перевірка, чи це CloudWatch Event
-            JsonNode input = mapper.readTree(inputStream);
-            if (input.has("source") && input.get("source").asText().equals("aws.events")) {
-                // Виклик розкладених методів
+            // Читаємо вхідний потік як JSON
+            String input = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            context.getLogger().log("Received input: " + input);
 
-                bot.sendMessage1();
-                bot.sendMessage2();
-                String response = "{\"statusCode\": 200}";
-                outputStream.write(response.getBytes());
-                return;
-            }
+            // Обробляємо Telegram Update
+            bot.handleUpdate(input);
 
-            // Обробка Telegram Update
-            Update update = mapper.readValue(inputStream, Update.class);
-            bot.onUpdateReceived(update);
-
+            // Відповідь 200 OK
             String response = "{\"statusCode\": 200}";
             outputStream.write(response.getBytes());
         } catch (Exception e) {
-            lambdaContext.getLogger().log("Error processing request: " + e.getMessage());
+            context.getLogger().log("Error: " + e.getMessage());
             String errorResponse = "{\"statusCode\": 500, \"error\": \"" + e.getMessage() + "\"}";
             outputStream.write(errorResponse.getBytes());
         }
