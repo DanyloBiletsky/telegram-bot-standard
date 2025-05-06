@@ -1,34 +1,33 @@
 package com.example.bot.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
-public class Main {
+public class Main extends TelegramWebhookBot {
 
     private final String token;
+    private final String username;
+    private final String botUri;
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
 
-    public Main(@Value("${telegrambot.token}") String token) {
+    public Main(@Value("${telegrambot.token}") String token,
+                @Value("${telegrambot.username}") String username) {
         this.token = token;
         this.httpClient = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
+        this.username = username;
     }
 
     public void handleUpdate(String updateJson) throws IOException, InterruptedException {
@@ -63,5 +62,20 @@ public class Main {
                 .GET()
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        return null;
+    }
+
+    @Override
+    public String getBotPath() {
+        return null;
+    }
+
+    @Override
+    public String getBotUsername() {
+        return username;
     }
 }
