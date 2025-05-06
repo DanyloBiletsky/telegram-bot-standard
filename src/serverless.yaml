@@ -21,4 +21,8 @@ functions:
       - http:
           path: /
           method: post
+          integration: lambda
           async: true
+          request:
+            template:
+              application/json: '{ "body": $input.json("$") }
