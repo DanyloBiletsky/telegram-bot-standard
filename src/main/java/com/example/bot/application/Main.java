@@ -64,6 +64,7 @@ public class Main extends TelegramWebhookBot {
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
+    // useless method for now
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         return null;
