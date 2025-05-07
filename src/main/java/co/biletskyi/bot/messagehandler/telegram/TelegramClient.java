@@ -13,24 +13,28 @@ public class TelegramClient {
     private final static int CLIENT_TIMEOUT_IN_MINUTES = 1;
     private final HttpClient httpClient;
     private final URI requestUri;
+
+    // потрібен для серіалізації об'єктів у JSON
     private final ObjectMapper objectMapper;
 
     public TelegramClient(HttpClient httpClient,
                           String botToken,
                           ObjectMapper objectMapper) {
         this.httpClient = httpClient;
+        //TODO перевірити чи коректно формується запит
         requestUri = URI.create(String.format(REQUEST_FORMAT, botToken));
         this.objectMapper = objectMapper;
     }
 
     public void send(Message message) throws MyTelegramException {
         HttpResponse<String> response;
+        //serialization
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(requestUri)
                     .timeout(Duration.ofMinutes(CLIENT_TIMEOUT_IN_MINUTES))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(message)))
+                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.convertValue(message, String.class)))
                     .build();
 
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

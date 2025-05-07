@@ -25,12 +25,13 @@ public class MessageHandler implements RequestHandler<UpdateEvent, Map<String, I
     }
 
     @Override
-    public Map<String, Integer> handleRequest(UpdateEvent value, Context context) {
-        logger.info(value.toString());
+    public Map<String, Integer> handleRequest(UpdateEvent event, Context context) {
+        logger.info(event.toString());
 
-        String message = String.format("Hey, you wrote: %s", value.getBody().getMessage().getText());
+        String message = String.format("Hey, you wrote: %s", event.getBody().getMessage().getText());
+
         try {
-            telegramClient.send(new Message(value.getBody().getMessage().getFrom().getId(), message));
+            telegramClient.send(new Message(event.getBody().getMessage().getFrom().getId(), message));
         } catch (MyTelegramException e) {
             logger.error("Cannot send a message", e);
         }
