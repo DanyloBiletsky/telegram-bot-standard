@@ -1,4 +1,4 @@
-package co.biletskyi.bot.messagehandler.telegram;
+package co.biletskyi.bot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

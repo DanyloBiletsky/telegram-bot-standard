@@ -1,19 +1,19 @@
-package co.biletskyi.bot.messagehandler;
+package co.biletskyi.bot;
 
-import co.biletskyi.bot.messagehandler.entity.UpdateEvent;
-import co.biletskyi.bot.messagehandler.telegram.Message;
-import co.biletskyi.bot.messagehandler.telegram.TelegramClient;
-import co.biletskyi.bot.messagehandler.telegram.MyTelegramException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.http.HttpClient;
 import java.util.Collections;
 import java.util.Map;
 
-public class MessageHandler implements RequestHandler<UpdateEvent, Map<String, Integer>>{
+public class MessageHandler implements RequestStreamHandler{
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
@@ -50,4 +50,8 @@ public class MessageHandler implements RequestHandler<UpdateEvent, Map<String, I
         return value;
     }
 
+    @Override
+    public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
+
+    }
 }
