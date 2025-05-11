@@ -1,16 +1,4 @@
-co/biletskyi/bot/messagehandler/telegram/Message.java
- co.biletskyi.bot.messagehandler.telegram.Message
-co/biletskyi/bot/messagehandler/entity/From.java
- co.biletskyi.bot.messagehandler.entity.From
-co/biletskyi/bot/messagehandler/telegram/MyTelegramException.java
- co.biletskyi.bot.messagehandler.telegram.MyTelegramException
-co/biletskyi/bot/messagehandler/entity/UpdateEvent.java
- co.biletskyi.bot.messagehandler.entity.UpdateEvent
-co/biletskyi/bot/messagehandler/entity/Body.java
- co.biletskyi.bot.messagehandler.entity.Body
-co/biletskyi/bot/messagehandler/entity/Message.java
- co.biletskyi.bot.messagehandler.entity.Message
-co/biletskyi/bot/messagehandler/MessageHandler.java
- co.biletskyi.bot.messagehandler.MessageHandler
-co/biletskyi/bot/messagehandler/telegram/TelegramClient.java
- co.biletskyi.bot.messagehandler.telegram.TelegramClient
+co/biletskyi/bot/MessageHandler.java
+ co.biletskyi.bot.MessageHandler
+co/biletskyi/bot/TelegramBot.java
+ co.biletskyi.bot.TelegramBot
