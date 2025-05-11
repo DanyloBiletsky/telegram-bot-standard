@@ -23,7 +23,7 @@ public class MessageHandler implements RequestStreamHandler{
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final TelegramBot bot = new TelegramBot(
             "@EchoDefaultBot",
-            "YOUR_BOT_TOKEN",
+            "token",
             "/webhook"         // Шлях для Webhook
     );
     @Override
