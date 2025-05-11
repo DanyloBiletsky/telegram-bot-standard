@@ -11,7 +11,7 @@ repositories {
 }
 
 ext {
-    set('lombokVersion', '1.18.16')
+    set('lombokVersion', '1.18.34')
     set('log4jVersion', '2.13.3')
     set('jacksonVersion', '2.11.3')
     set('telegramVersion', '6.9.0')
@@ -39,6 +39,14 @@ task buildZip(type: Zip) {
     into('lib') {
         from configurations.runtimeClasspath
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.fork = true
+    options.forkOptions.jvmArgs += [
+            '--add-exports', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+            '--add-exports', 'jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED'
+    ]
 }
 
 build.dependsOn buildZip

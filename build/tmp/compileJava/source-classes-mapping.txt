@@ -1,4 +1,0 @@
-co/biletskyi/bot/MessageHandler.java
- co.biletskyi.bot.MessageHandler
-co/biletskyi/bot/TelegramBot.java
- co.biletskyi.bot.TelegramBot

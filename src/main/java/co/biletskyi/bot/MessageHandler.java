@@ -18,14 +18,14 @@ import java.util.Collections;
 import java.util.Map;
 
 public class MessageHandler implements RequestStreamHandler{
-    //private final TelegramClient telegramClient;
     private final static Logger logger = (Logger) LogManager.getLogger(MessageHandler.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final TelegramBot bot = new TelegramBot(
-            "@EchoDefaultBot",
+            "@Username",
             "token",
-            "/webhook"         // Шлях для Webhook
+            "/path"
     );
+
     @Override
     public void handleRequest(InputStream inputStream,
                               OutputStream outputStream,
