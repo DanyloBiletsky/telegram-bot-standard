@@ -20,9 +20,9 @@ public class MessageHandler implements RequestStreamHandler {
             .configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, false);
     private static final TelegramBot bot = new TelegramBot(
             // my data:
-            "@.....Bot",
+            "@...Bot",
             "token",
-            "/......LambdaFunction"
+            "/...LambdaFunction"
     );
     @Override
     public void handleRequest(InputStream inputStream,

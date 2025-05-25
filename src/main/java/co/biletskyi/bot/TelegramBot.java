@@ -50,7 +50,7 @@ public class TelegramBot extends TelegramWebhookBot {
     }
 
     private String showServerTime() {
-        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId utcZone = ZoneId.of("UTC+3");
         LocalDateTime now = LocalDateTime.now(utcZone);
         return " (Час на сервері: " + now + ")";
     }
