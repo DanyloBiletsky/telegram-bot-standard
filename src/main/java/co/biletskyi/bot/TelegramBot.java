@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Getter
 @Setter
 public class TelegramBot extends TelegramWebhookBot {
@@ -22,11 +25,9 @@ public class TelegramBot extends TelegramWebhookBot {
     public TelegramBot(String botUsername,
                        String botToken,
                        String botPath) {
-
         this.botUsername = botUsername;
         this.botToken = botToken;
         this.botPath = botPath;
-
     }
 
     @Override
@@ -39,16 +40,24 @@ public class TelegramBot extends TelegramWebhookBot {
 
             SendMessage message = new SendMessage();
             message.setChatId(String.valueOf(chatId));
-            message.setText(receivedText); // Відповідаємо тим самим текстом
+            // Відповідаємо тим самим текстом та показуємо час на сервері:
+            message.setText(receivedText + showServerTime());
 
             return message;
         }
+        //if the message is not a text or does not exist:
         return null;
+    }
+
+    private String showServerTime() {
+        ZoneId utcZone = ZoneId.of("UTC");
+        LocalDateTime now = LocalDateTime.now(utcZone);
+        return " (Час на сервері: " + now + ")";
     }
 
     @Override
     public String getBotPath() {
-        return null;
+        return botPath;
     }
 
     @Override

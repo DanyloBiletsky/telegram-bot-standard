@@ -12,22 +12,67 @@ repositories {
 
 ext {
     set('lombokVersion', '1.18.34')
-    set('log4jVersion', '2.13.3')
-    set('jacksonVersion', '2.11.3')
+    set('log4jVersion', '2.23.1')
+    set('jacksonVersion', '2.14.2')
     set('telegramVersion', '6.9.0')
+    set('slf4jVersion', '2.0.16')
+}
+
+configurations.configureEach {
+    exclude group: 'joda-time', module: 'joda-time'
 }
 
 dependencies {
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
-    implementation "org.apache.logging.log4j:log4j-slf4j18-impl:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+
+    //implementation "org.slf4j:slf4j-simple:2.0.3"
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
+    //implementation("org.slf4j:slf4j-nop:2.0.16")
+
     implementation 'com.amazonaws:aws-lambda-java-log4j2:1.2.0'
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-    implementation "org.telegram:telegrambots:${telegramVersion}"
+
+    implementation "org.apache.httpcomponents:httpclient:4.5.14"
+
+    implementation("org.telegram:telegrambots:${telegramVersion}") {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+        exclude group: 'joda-time'
+        exclude group: 'com.fasterxml.jackson.datatype', module: 'jackson-datatype-jsr310'
+        exclude group: 'com.fasterxml.jackson.jaxrs', module: 'jackson-jaxrs-base'
+        exclude group: 'com.fasterxml.jackson.jaxrs', module: 'jackson-jaxrs-json-provider'
+        exclude group: 'com.fasterxml.jackson.module', module: 'jackson-module-jaxb-annotations'
+
+        exclude group: 'org.glassfish.jersey.core'
+        exclude group: 'org.glassfish.jersey.containers'
+        exclude group: 'org.glassfish.jersey.media'
+        exclude group: 'org.glassfish.jersey.inject'
+        exclude group: 'org.glassfish.hk2'
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'commons-codec'
+        exclude group: 'commons-io'
+        exclude group: 'commons-lang3'
+        exclude group: 'commons-logging'
+        exclude group: 'org.javassist'
+        exclude group: 'org.osgi'
+        exclude group: 'jakarta.ws.rs'
+        exclude group: 'jakarta.xml.bind'
+        exclude group: 'jakarta.activation'
+        exclude group: 'jakarta.validation'
+        exclude group: 'jakarta.annotation'
+        exclude group: 'jakarta.inject'
+        exclude group: 'aopalliance'
+    }
+
+
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -43,6 +88,7 @@ task buildZip(type: Zip) {
 
 tasks.withType(JavaCompile) {
     options.fork = true
+    options.encoding = 'UTF-8' // Додаємо UTF-8
     options.forkOptions.jvmArgs += [
             '--add-exports', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
             '--add-exports', 'jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED'
